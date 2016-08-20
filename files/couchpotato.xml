@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service version="1.0">
+	<short>CouchPotato Daemon</short>
+	<description>CouchPotato PVR for torrents and usenet daemon service</description>
+	<port port="5050" protocol="tcp"/>
+</service>
