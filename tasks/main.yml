@@ -6,29 +6,21 @@
 - name: Clone couchpotato
   git:
     repo: https://github.com/CouchPotato/CouchPotatoServer.git
-    dest: /var/lib/CouchPotatoServer
+    dest: /opt/CouchPotatoServer
     accept_hostkey: yes
 
 - name: Copy systemd unit
   synchronize:
-    src: /var/lib/CouchPotatoServer/init/couchpotato.service
+    src: /opt/CouchPotatoServer/init/couchpotato.service
     dest: /etc/systemd/system/couchpotato.service
   delegate_to: "{{ inventory_hostname }}"
 
-  # - name: Specify correct systemd ExecStart
-  #   lineinfile:
-  #     dest: /etc/systemd/system/couchpotato.service
-  #     regexp: '^ExecStart\=\/var\/lib\/CouchPotatoServer\/CouchPotato.py$'
-  #     line: 'ExecStart=/bin/python /var/lib/CouchPotatoServer/CouchPotato.py --daemon'
-  #     state: present
-
-- name: Firewalld config
-  firewalld:
-    port: 5050
-    permanent: true
-    immediate: true
-    state: enabled
-  ignore_errors: yes
+- name: Specify correct systemd ExecStart
+  lineinfile:
+    dest: /etc/systemd/system/couchpotato.service
+    regexp: '^ExecStart\=\/var\/lib\/CouchPotatoServer\/CouchPotato.py$'
+    line: 'ExecStart=/opt/CouchPotatoServer/CouchPotato.py --daemon'
+    state: present
 
 - name: Create couchpotator user
   user: name=couchpotato state=present
@@ -38,4 +30,3 @@
 
 - name: Start and enable couchpotato
   service: name=couchpotato enabled=yes state=started
-
